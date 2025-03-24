@@ -1,0 +1,17 @@
+﻿<Window x:Class="Name.AddEditBookWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Name"
+        mc:Ignorable="d"
+        Title="Добавить/Редактировать книгу" Height="300" Width="400">
+    <Grid>
+        <TextBox x:Name="TitleBox" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="200"/>
+        <ComboBox x:Name="AuthorComboBox" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Width="200"/>
+        <TextBox x:Name="YearPublishedBox" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="200"/>
+        <TextBox x:Name="GenreBox" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" Width="200"/>
+        <CheckBox x:Name="IsAvailableCheckBox" Content="Доступность" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top"/>
+        <Button Content="Сохранить" Click="Save_Click" HorizontalAlignment="Left" Margin="10,160,0,0" VerticalAlignment="Top" Width="75"/>
+    </Grid>
+</Window>
