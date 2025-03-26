@@ -65,7 +65,7 @@ namespace Name
                 LoadBooks();
             } 
         }
-        private void deleteBook_Click(Object sender, RoutedEventArgs e)
+        private void DeleteBook_Click(Object sender, RoutedEventArgs e)
         {
             var selectedBook = BooksGrid.SelectedItem as Book;
             if (selectedBook != null)

@@ -7,11 +7,22 @@
         mc:Ignorable="d"
         Title="Добавить/Редактировать книгу" Height="300" Width="400">
     <Grid>
-        <TextBox x:Name="TitleBox" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="200"/>
-        <ComboBox x:Name="AuthorComboBox" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Width="200"/>
-        <TextBox x:Name="YearPublishedBox" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="200"/>
-        <TextBox x:Name="GenreBox" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" Width="200"/>
-        <CheckBox x:Name="IsAvailableCheckBox" Content="Доступность" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top"/>
-        <Button Content="Сохранить" Click="Save_Click" HorizontalAlignment="Left" Margin="10,160,0,0" VerticalAlignment="Top" Width="75"/>
+        <Label Content="Название:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TitleBox" HorizontalAlignment="Left" Margin="120,10,0,0" VerticalAlignment="Top" Width="250"/>
+
+        <Label Content="Автор:" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="AuthorComboBox" HorizontalAlignment="Left" Margin="120,40,0,0" VerticalAlignment="Top" Width="250"
+                  DisplayMemberPath="FullName" SelectedValuePath="Id"/>
+
+        <Label Content="Год публикации:" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="YearPublishedBox" HorizontalAlignment="Left" Margin="120,70,0,0" VerticalAlignment="Top" Width="250"/>
+
+        <Label Content="Жанр:" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="GenreBox" HorizontalAlignment="Left" Margin="120,100,0,0" VerticalAlignment="Top" Width="250"/>
+
+        <CheckBox x:Name="IsAvailableCheckBox" Content="Доступна" HorizontalAlignment="Left" Margin="120,130,0,0" VerticalAlignment="Top"/>
+
+        <Button Content="Сохранить" Click="Save_Click" HorizontalAlignment="Left" Margin="120,160,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button Content="Добавить автора" Click="AddAuthor_Click" HorizontalAlignment="Left" Margin="200,160,0,0" VerticalAlignment="Top" Width="100"/>
     </Grid>
 </Window>

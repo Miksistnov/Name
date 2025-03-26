@@ -1,0 +1,16 @@
+﻿<Window x:Class="Name.AddAuthorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Name"
+        mc:Ignorable="d"
+        Title="Добавить автора" Height="200" Width="300">
+    <Grid>
+        <TextBox x:Name="FirstNameBox" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="200" Text="Имя"/>
+        <TextBox x:Name="PatronomycBox" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Width="200" Text="Отчество"/>
+        <TextBox x:Name="LastNameBox" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="200" Text="Фамилия"/>
+        <DatePicker x:Name="BirthdayPicker" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" Width="200" Text="Дата рождения"/>
+        <Button Content="Сохранить" Click="Save_Click" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top" Width="75"/>
+    </Grid>
+</Window>
