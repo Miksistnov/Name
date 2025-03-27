@@ -26,7 +26,7 @@ namespace Name
         public AddEditBookWindow(Book book=null)
         {
             InitializeComponent();
-            _datab = new Database("Server=192.168.200.13;Database=Libraryes;Uid=student;Pwd=student;");
+            _datab = new Database("Server = 192.168.200.13; Database = Libraryes; Uid = student; Pwd = student");
             _book = book;
             LoadAuthors();
             if(book != null)
@@ -44,22 +44,33 @@ namespace Name
             using (var con = _datab.GetConnection())
             {
                 con.Open();
-                var command = new MySqlCommand("SELECT Id, CONCAT(FirstName, ' ', LastName) AS FullName FROM Authors", con);
-                var reader = command.ExecuteReader();
-                
-                while(reader.Read()) 
+                var command = new MySqlCommand("SELECT Id, FirstName, COALESCE(Patronomic, '') as Patronomic, LastName FROM Authors ORDER BY LastName, FirstName", con);
+                using (var reader = command.ExecuteReader())
                 {
-                    _authors.Add(new Author
+                    while (reader.Read())
                     {
-                        Id = reader.GetInt32("Id"),
-                        FirstName = reader.GetString("FirstName"),
-                        Patronymic = reader.IsDBNull(reader.GetOrdinal("Patronymic")) ? string.Empty : reader.GetString("Patonymic"),
-                        LastName = reader.GetString("LastName"),
-                        FullName = $"{reader.GetString("LastName")} {reader.GetString("FirstName")}" + $"{(reader.IsDBNull(reader.GetOrdinal("Patronymic")) ? string.Empty : reader.GetString("Patonymic"))}"
-                    });
+                         var author = new Author
+                        {
+                            Id = reader.GetInt32("Id"),
+                            FirstName = reader.GetString("FirstName"),
+                            Patronomic = reader.GetString("Patronomic"),
+                            LastName = reader.GetString("LastName"),
+                            FullName = $"{reader.GetString("LastName")} {reader.GetString("FirstName")} {reader.GetString("Patronomic")}"
+                        };
+                        _authors.Add(author);
+                    }
                 }
-                AuthorComboBox.ItemsSource = _authors;
             }
+            Dispatcher.Invoke(() =>
+            {
+                AuthorComboBox.ItemsSource = _authors;
+                AuthorComboBox.DisplayMemberPath = "FullName";
+                AuthorComboBox.SelectedValuePath = "Id";
+                if(_book != null)
+                {
+                    AuthorComboBox.SelectedValue = _book.AuthorID;
+                }
+            });
         }
         private void AddAuthor_Click(object sender, EventArgs e)
         {
@@ -67,7 +78,30 @@ namespace Name
             if(addAuthorWindow.ShowDialog() == true)
             {
                 LoadAuthors();
+                AuthorComboBox.Focus();
+                if(AuthorComboBox.Items.Count > 0)
+                {
+                    AuthorComboBox.SelectedIndex = AuthorComboBox.Items.Count - 1;
+                    var scrollViewer = FindVisualChild<ScrollViewer>(AuthorComboBox);
+                    scrollViewer?.ScrollToEnd();
+                }
             }
+        }
+        private static T FindVisualChild<T>(DependencyObject obj) where T : DependencyObject
+        {
+            for( int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+                if( child != null  && child is T)
+                    return (T)child;
+                else
+                {
+                    T childOfChild = FindVisualChild<T>(child);
+                    if (childOfChild != null)
+                        return childOfChild;
+                }
+            }
+            return null;
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
@@ -84,6 +118,7 @@ namespace Name
             {
                 MessageBox.Show("Некорректный год публикации");
             }
+            
             try
             {
                 using (var con = _datab.GetConnection())
@@ -101,7 +136,7 @@ namespace Name
                     }
                     command.Parameters.AddWithValue("@Title", TitleBox.Text);
                     command.Parameters.AddWithValue("@AuthorID", AuthorComboBox.SelectedValue);
-                    command.Parameters.AddWithValue("@YearPublished", YearPublishedBox);
+                    command.Parameters.AddWithValue("@YearPublished", year);
                     command.Parameters.AddWithValue("@Genre", GenreBox.Text);
                     command.Parameters.AddWithValue("@IsAvailable", IsAvailableCheckBox.IsChecked ?? false);
                     command.ExecuteNonQuery();

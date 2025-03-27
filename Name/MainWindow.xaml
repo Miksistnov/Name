@@ -6,14 +6,17 @@
         xmlns:local="clr-namespace:Name"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <converters:BooleanToYesNoConverter x:Key="YesNoConverter"/>
+    </Window.Resources>
     <Grid>
         <DataGrid x:Name="BooksGrid" AutoGenerateColumns="False" Margin="10">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Название" Binding="{Binding Title}"/>
-                <DataGridTextColumn Header="Автор" Binding="{Binding AuthorName}"/>
-                <DataGridTextColumn Header="Год публикации" Binding="{Binding YearPublished}"/>
-                <DataGridTextColumn Header="Жанр" Binding="{Binding Genre}"/>
-                <DataGridTextColumn Header="Доступность" Binding="{Binding IsAvailable}"/>
+                <DataGridTextColumn Header="Название" Binding="{Binding Title}" Width="*"/>
+                <DataGridTextColumn Header="Автор" Binding="{Binding AuthorName}" Width="*"/>
+                <DataGridTextColumn Header="Год публикации" Binding="{Binding YearPublished}" Width="80"/>
+                <DataGridTextColumn Header="Жанр" Binding="{Binding Genre}" Width="*"/>
+                <DataGridTextColumn Header="Доступность" Binding="{Binding IsAvailable, Converter=={StaticResource YesNoConverter)}}" Width="80"/>
             </DataGrid.Columns>
         </DataGrid>
         <Button Content="Добавить" Click="AddBook_Click" HorizontalAlignment="Left" Margin="10,370,0,0" VerticalAlignment="Top" Width="75"/>

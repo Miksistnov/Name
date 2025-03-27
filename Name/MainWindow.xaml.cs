@@ -23,7 +23,7 @@ namespace Name
         public MainWindow()
         {
             InitializeComponent();
-            _datab = new Database("Server=192.168.200.13;Database=Libraryes;Uid=student;Pwd=student;");
+            _datab = new Database("Server = 192.168.200.13; Database = Libraryes; Uid = student; Pwd = student");
             LoadBooks();
         }
         private void LoadBooks()
