@@ -4,24 +4,37 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Name"
+        xmlns:converters="clr-namespace:Name.Converters"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
         <converters:BooleanToYesNoConverter x:Key="YesNoConverter"/>
     </Window.Resources>
     <Grid>
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="5">
+                <ComboBox x:Name="SearchTypeComboBox" Width="120" Margin="5" SelectionChanged="SearchTypeComboBox_SelectionChanged">
+                    <ComboBoxItem Content="По Названию" Tag="Title"/>
+                    <ComboBoxItem Content="По Автору" Tag="Author"/>
+                    <ComboBoxItem Content="Все" Tag="True"/>
+                </ComboBox>
+                <TextBox x:Name="SearchTextBox" Width="200" Margin="5" TextChanged="SearchTextBox_TextChanged"/>
+                <Button Content="Добавить" Click="AddBook_Click" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" Width="75"/>
+                <Button Content="Редактировать" Click="EditBook_Click" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" Width="75"/>
+                <Button Content="Удалить" Click="DeleteBook_Click" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" Width="75"/>
+            </StackPanel>
+        
         <DataGrid x:Name="BooksGrid" AutoGenerateColumns="False" Margin="10">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Название" Binding="{Binding Title}" Width="*"/>
                 <DataGridTextColumn Header="Автор" Binding="{Binding AuthorName}" Width="*"/>
                 <DataGridTextColumn Header="Год публикации" Binding="{Binding YearPublished}" Width="80"/>
                 <DataGridTextColumn Header="Жанр" Binding="{Binding Genre}" Width="*"/>
-                <DataGridTextColumn Header="Доступность" Binding="{Binding IsAvailable, Converter=={StaticResource YesNoConverter)}}" Width="80"/>
+                <DataGridTextColumn Header="Доступность" Binding="{Binding IsAvailable, Converter={StaticResource YesNoConverter}}" Width="80"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="Добавить" Click="AddBook_Click" HorizontalAlignment="Left" Margin="10,370,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button Content="Редактировать" Click="EditBook_Click" HorizontalAlignment="Left" Margin="90,370,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button Content="Удалить" Click="DeleteBook_Click" HorizontalAlignment="Left" Margin="170,370,0,0" VerticalAlignment="Top" Width="75"/>
-        <TextBox x:Name="SearchBox" HorizontalAlignment="Left" Margin="10,340,0,0" VerticalAlignment="Top" Width="200" TextChanged="SearchBox_TextChanged"/>
+        </DockPanel>
+        
+        
     </Grid>
 </Window>

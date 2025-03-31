@@ -11,6 +11,7 @@ using System.Windows.Shapes;
 using System.Collections.Generic;
 using System.Linq;
 using MySqlConnector;
+using System.Data;
 
 namespace Name
 {
@@ -20,6 +21,7 @@ namespace Name
     public partial class MainWindow : Window
     {
         private readonly Database _datab;
+        private List<Book> _allBooks;
         public MainWindow()
         {
             InitializeComponent();
@@ -32,21 +34,19 @@ namespace Name
             {
                 conn.Open();
                 var command = new MySqlCommand("SELECT Books.Id, Books.Title, Books.YearPublished, Books.Genre, Books.IsAvailable, Concat(Authors.FirstName, ' ', Authors.LastName) AS AuthorName FROM Books JOIN Authors ON Books.AuthorID = Authors.Id", conn);
-                var reader = command.ExecuteReader();
-                var books = new List<Book>();
-                while (reader.Read())
+                var adapter = new MySqlDataAdapter(command);
+                var dataSet = new DataSet();
+                adapter.Fill(dataSet);
+                _allBooks= dataSet.Tables[0].AsEnumerable().Select(row => new Book
                 {
-                    books.Add(new Book
-                    {
-                        Id = reader.GetInt32("Id"),
-                        Title = reader.GetString("Title"),
-                        YearPublished = reader.GetInt32("YearPublished"),
-                        Genre = reader.GetString("Genre"),
-                        IsAvailable = reader.GetBoolean("IsAvailable"),
-                        AuthorName = reader.GetString("AuthorName"),
-                    });
-                }
-                BooksGrid.ItemsSource = books;
+                    Id = row.Field<int>("Id"),
+                    Title = row.Field<string>("Title"),
+                    YearPublished=row.Field<int>("YearPublished"),
+                    Genre = row.Field<string>("Genre"),
+                    IsAvailable=row.Field<bool>("IsAvailable"),
+                    AuthorName= row.Field<string>("AuthorName")
+                }).ToList();
+                BooksGrid.ItemsSource = _allBooks;
             }
         }
         private void AddBook_Click(object sender, RoutedEventArgs e)
@@ -84,14 +84,40 @@ namespace Name
                 }
             }
         }
-        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void SearchBooks(string searchText)
         {
-            var searchText = SearchBox.Text.ToLower();
-            var books = BooksGrid.ItemsSource as List<Book>;
-            if (books != null)
+            if (string.IsNullOrWhiteSpace(searchText))
             {
-                BooksGrid.ItemsSource= books.Where(b => b.Title.ToLower().Contains(searchText) || b.AuthorName.ToLower().Contains(searchText)).ToList();
+                BooksGrid.ItemsSource = _allBooks;
+                return;
             }
+            
+            searchText = searchText.ToLower();
+
+            var SearchType = (SearchTypeComboBox.SelectedItem as ComboBoxItem)?.Tag.ToString();
+            IEnumerable<Book> query = _allBooks;
+            switch (SearchType)
+            {
+                case "Title":
+                    query = _allBooks.Where(book => book.Title.ToLower().Contains(searchText));
+                    break;
+                case "Author":
+                    query = _allBooks.Where(book => book.AuthorName.ToLower().Contains(searchText));
+                    break;
+                default: 
+                    query = _allBooks.Where(book => book.Title.ToLower().Contains(searchText) || book.AuthorName.ToLower().Contains(searchText));
+                    break;
+            }
+            BooksGrid.ItemsSource = query.ToList();
+        }
+        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            SearchBooks(SearchTextBox.Text);
+        }
+
+        private void SearchTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }
